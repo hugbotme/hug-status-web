@@ -2,11 +2,28 @@ package main
 
 import (
 	"encoding/json"
+	"flag"
 	"fmt"
+	"github.com/hugbotme/hug-status-web/config"
+	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
+	"strconv"
 
 	"github.com/garyburd/redigo/redis"
+)
+
+var (
+	flagConfigFile *string
+	flagPidFile    *string
+	flagVersion    *bool
+)
+
+const (
+	majorVersion = 1
+	minorVersion = 0
+	patchVersion = 0
 )
 
 type Info struct {
@@ -16,13 +33,38 @@ type Info struct {
 	Received   int `json:"received"`
 }
 
-func main() {
+// Init function to define arguments
+func init() {
+	flagConfigFile = flag.String("config", "", "Configuration file")
+	flagPidFile = flag.String("pidfile", "", "Write the process id into a given file")
+	flagVersion = flag.Bool("version", false, "Outputs the version number and exits")
+}
 
-	red, err := redis.Dial("tcp", ":6379")
-	if err != nil {
-		fmt.Println("error", err)
+func main() {
+	flag.Parse()
+
+	// Output the version and exit
+	if *flagVersion {
+		fmt.Printf("hug-status v%d.%d.%d\n", majorVersion, minorVersion, patchVersion)
 		return
 	}
+
+	// Check for configuration file
+	if len(*flagConfigFile) <= 0 {
+		log.Fatal("No configuration file found. Please add the --config parameter")
+	}
+
+	// PID-File
+	if len(*flagPidFile) > 0 {
+		ioutil.WriteFile(*flagPidFile, []byte(strconv.Itoa(os.Getpid())), 0644)
+	}
+
+	config, err := config.NewConfiguration(flagConfigFile)
+	if err != nil {
+		log.Fatal("Configuration initialisation failed:", err)
+	}
+
+	red := config.ConnectRedis()
 	defer red.Close()
 
 	http.HandleFunc("/info.json", func(w http.ResponseWriter, r *http.Request) {
