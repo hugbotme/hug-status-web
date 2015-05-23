@@ -13,6 +13,7 @@ type Info struct {
 	InProgress int `json:"in_progress"`
 	Merged     int `json:"merged"`
 	Closed     int `json:"closed"`
+	Received   int `json:"received"`
 }
 
 func main() {
@@ -25,12 +26,19 @@ func main() {
 	defer red.Close()
 
 	http.HandleFunc("/info.json", func(w http.ResponseWriter, r *http.Request) {
-		in_progress, _ := redis.Int(red.Do("LLEN", "hugbot:pullrequests"))
-		merged, _ := redis.Int(red.Do("LLEN", "hugbot:pullrequests:merged"))
-		closed, _ := redis.Int(red.Do("LLEN", "hugbot:pullrequests:closed"))
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Content-Security-Policy", "*")
+
+		in_progress, _ := redis.Int(red.Do("LLEN", "hug:pullrequests"))
+		merged, _ := redis.Int(red.Do("LLEN", "hug:pullrequests:merged"))
+		closed, _ := redis.Int(red.Do("LLEN", "hug:pullrequests:closed"))
+		received, _ := redis.Int(red.Do("LLEN", "hug:queue"))
 
 		pr := Info{
-			in_progress, merged, closed,
+			in_progress,
+			merged,
+			closed,
+			received,
 		}
 		data, err := json.Marshal(pr)
 		if err != nil {
@@ -41,5 +49,5 @@ func main() {
 	})
 
 	fmt.Println("Running on http://localhost:8080")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Fatal(http.ListenAndServe("127.0.0.1:8080", nil))
 }
