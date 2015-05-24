@@ -69,7 +69,7 @@ func main() {
 	http.HandleFunc("/info.json", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 		w.Header().Set("Content-Security-Policy", "*")
-		// TODO Add JSON output header
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 
 		in_progress, _ := redis.Int(red.Do("LLEN", "hug:pullrequests"))
 		merged, _ := redis.Int(red.Do("LLEN", "hug:pullrequests:merged"))
@@ -88,6 +88,8 @@ func main() {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
+
+		w.WriteHeader(http.StatusOK)
 		w.Write(data)
 	})
 
