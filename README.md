@@ -6,15 +6,35 @@ Outputs statistics about the work of hugbot in JSON format.
 
 ## Statistics
 
-TODO
+```json
+{
+  "in_progress": 0,
+  "merged": 0,
+  "closed": 0,
+  "received": 3
+}
+```
 
 ## Installation
 
-TODO
+```
+$ cp config.json.dist config.json
+$ go get
+$ go build
+$ ./hug-status-web --config="./config.json"
+$ open http://localhost:8080/info.json
+```
 
 ## Configuration
 
-TODO
+```json
+{
+  "redis": {
+    "url": ":6379",
+    "auth": ""
+  }
+}
+```
 
 ## Motivation
 
