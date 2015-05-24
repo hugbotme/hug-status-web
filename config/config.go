@@ -5,24 +5,10 @@ import (
 	"github.com/garyburd/redigo/redis"
 	"io/ioutil"
 	"log"
-	"os"
 )
 
 type Configuration struct {
-	Twitter twitterConfiguration `json:"twitter"`
-	Github  GithubConfiguration  `json:"github"`
-	Redis   RedisConfiguration   `json:"redis"`
-}
-
-type twitterConfiguration struct {
-	ConsumerKey       string `json:"consumer-key"`
-	ConsumerSecret    string `json:"consumer-secret"`
-	AccessToken       string `json:"access-token"`
-	AccessTokenSecret string `json:"access-token-secret"`
-}
-
-type GithubConfiguration struct {
-	APIToken string `json:"api-token"`
+	Redis RedisConfiguration `json:"redis"`
 }
 
 type RedisConfiguration struct {
@@ -48,12 +34,17 @@ func NewConfiguration(configFile *string) (*Configuration, error) {
 func (config *Configuration) ConnectRedis() redis.Conn {
 	redisClient, err := redis.Dial("tcp", config.Redis.Url)
 	if err != nil {
-		log.Fatal("Redis client init failed:", err)
-		os.Exit(2)
+		log.Fatal("Redis client init (connect) failed:", err)
 	}
+
+	if len(config.Redis.Auth) == 0 {
+		return redisClient
+	}
+
 	if _, err := redisClient.Do("AUTH", config.Redis.Auth); err != nil {
 		redisClient.Close()
-		os.Exit(2)
+		log.Fatal("Redis client init (auth) failed:", err)
 	}
+
 	return redisClient
 }
