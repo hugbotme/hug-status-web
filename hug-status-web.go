@@ -69,10 +69,12 @@ func main() {
 	http.HandleFunc("/info.json", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 		w.Header().Set("Content-Security-Policy", "*")
+		// TODO Add JSON output header
 
 		in_progress, _ := redis.Int(red.Do("LLEN", "hug:pullrequests"))
 		merged, _ := redis.Int(red.Do("LLEN", "hug:pullrequests:merged"))
 		closed, _ := redis.Int(red.Do("LLEN", "hug:pullrequests:closed"))
+		// TODO Rename received to queue
 		received, _ := redis.Int(red.Do("LLEN", "hug:queue"))
 
 		pr := Info{
@@ -89,6 +91,7 @@ func main() {
 		w.Write(data)
 	})
 
+	// TODO Make host an Port configurable
 	fmt.Println("Running on http://localhost:8080")
 	log.Fatal(http.ListenAndServe("127.0.0.1:8080", nil))
 }
