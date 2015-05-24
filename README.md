@@ -40,8 +40,8 @@ $ open http://localhost:8080/info.json
 }
 ```
 
-* redis.url: IP and Port (in IP:Port format) where Redis is running.
-* redis.auth: Password to authenticate to the Redis server. If this is an empty string, no [AUTH command](http://redis.io/commands/auth) will be executed.
+* **redis.url**: IP and Port (in IP:Port format) where Redis is running.
+* **redis.auth**: Password to authenticate to the Redis server. If this is an empty string, no [AUTH command](http://redis.io/commands/auth) will be executed.
 
 ## Motivation
 
