@@ -4,14 +4,13 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"github.com/garyburd/redigo/redis"
 	"github.com/hugbotme/hug-status-web/config"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
 	"strconv"
-
-	"github.com/garyburd/redigo/redis"
 )
 
 var (
@@ -45,7 +44,7 @@ func main() {
 
 	// Output the version and exit
 	if *flagVersion {
-		fmt.Printf("hug-status v%d.%d.%d\n", majorVersion, minorVersion, patchVersion)
+		fmt.Printf("hug-status-web v%d.%d.%d\n", majorVersion, minorVersion, patchVersion)
 		return
 	}
 
