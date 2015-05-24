@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/hugbotme/hug-status-web.svg?branch=master)](https://travis-ci.org/hugbotme/hug-status-web)
 
 Outputs statistics about the work of hugbot in JSON format.
-This is awsome. You know? Heavy reqirements.
+This is aw some. You know? Heavy requirements.
 
 ## Statistics
 
