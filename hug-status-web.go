@@ -71,14 +71,14 @@ func main() {
 		w.Header().Set("Content-Security-Policy", "*")
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 
-		in_progress, _ := redis.Int(red.Do("LLEN", "hug:pullrequests"))
+		inProgress, _ := redis.Int(red.Do("LLEN", "hug:pullrequests"))
 		merged, _ := redis.Int(red.Do("LLEN", "hug:pullrequests:merged"))
 		closed, _ := redis.Int(red.Do("LLEN", "hug:pullrequests:closed"))
 		// TODO Rename received to queue
 		received, _ := redis.Int(red.Do("LLEN", "hug:queue"))
 
 		pr := Info{
-			in_progress,
+			inProgress,
 			merged,
 			closed,
 			received,
