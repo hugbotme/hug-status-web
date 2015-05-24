@@ -8,11 +8,16 @@ import (
 )
 
 type Configuration struct {
-	Redis RedisConfiguration `json:"redis"`
+	Redis     RedisConfiguration     `json:"redis"`
+	StatusWeb StatusWebConfiguration `json:"status-web"`
+}
+
+type StatusWebConfiguration struct {
+	URL string `json:"url"`
 }
 
 type RedisConfiguration struct {
-	Url  string `json:"url"`
+	URL  string `json:"url"`
 	Auth string `json:"auth"`
 }
 
@@ -32,7 +37,7 @@ func NewConfiguration(configFile *string) (*Configuration, error) {
 }
 
 func (config *Configuration) ConnectRedis() redis.Conn {
-	redisClient, err := redis.Dial("tcp", config.Redis.Url)
+	redisClient, err := redis.Dial("tcp", config.Redis.URL)
 	if err != nil {
 		log.Fatal("Redis client init (connect) failed:", err)
 	}

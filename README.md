@@ -40,6 +40,9 @@ $ open http://localhost:8080/info.json
 
 ```json
 {
+  "status-web": {
+    "url": "127.0.0.1:8080"
+  },
   "redis": {
     "url": ":6379",
     "auth": ""
@@ -47,6 +50,7 @@ $ open http://localhost:8080/info.json
 }
 ```
 
+* **status-web.url**: IP and Port (in IP:Port format) where the status will be available and callable.
 * **redis.url**: IP and Port (in IP:Port format) where Redis is running.
 * **redis.auth**: Password to authenticate to the Redis server. If this is an empty string, no [AUTH command](http://redis.io/commands/auth) will be executed.
 

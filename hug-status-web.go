@@ -92,7 +92,6 @@ func main() {
 		w.Write(data)
 	})
 
-	// TODO Make host an Port configurable
-	fmt.Println("Running on http://localhost:8080")
-	log.Fatal(http.ListenAndServe("127.0.0.1:8080", nil))
+	fmt.Printf("Running on http://%s\n", config.StatusWeb.URL)
+	log.Fatal(http.ListenAndServe(config.StatusWeb.URL, nil))
 }
