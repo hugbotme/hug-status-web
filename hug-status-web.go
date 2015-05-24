@@ -29,7 +29,7 @@ type Info struct {
 	InProgress int `json:"in_progress"`
 	Merged     int `json:"merged"`
 	Closed     int `json:"closed"`
-	Received   int `json:"received"`
+	Queue      int `json:"queue"`
 }
 
 // Init function to define arguments
@@ -74,14 +74,13 @@ func main() {
 		inProgress, _ := redis.Int(red.Do("LLEN", "hug:pullrequests"))
 		merged, _ := redis.Int(red.Do("LLEN", "hug:pullrequests:merged"))
 		closed, _ := redis.Int(red.Do("LLEN", "hug:pullrequests:closed"))
-		// TODO Rename received to queue
-		received, _ := redis.Int(red.Do("LLEN", "hug:queue"))
+		queue, _ := redis.Int(red.Do("LLEN", "hug:queue"))
 
 		pr := Info{
 			inProgress,
 			merged,
 			closed,
-			received,
+			queue,
 		}
 		data, err := json.Marshal(pr)
 		if err != nil {

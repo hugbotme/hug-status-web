@@ -11,14 +11,14 @@ Outputs statistics about the work of hugbot in JSON format.
   "in_progress": 0,
   "merged": 0,
   "closed": 0,
-  "received": 3
+  "queue": 3
 }
 ```
 
 * **in_progress**: Current amount of open pull requests.
 * **merged**: Amount of merge requests which were merged.
 * **closed**: Amount of merge requests which were closed and not merged.
-* **received**: Current amount of job entries in the queue.
+* **queue**: Current amount of job entries in the queue.
 
 A *job entry* is a message which contains a repository to correct.
 
