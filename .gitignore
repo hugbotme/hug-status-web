@@ -24,4 +24,5 @@ _testmain.go
 *.prof
 
 # Application binaries
+config.json
 hug-status-web
